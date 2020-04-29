@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
 import { timerContext, useTimer } from './contexts/timer';
 import { guildContext, useGuild } from './contexts/guild';
 import { myGuildContext, useMyGuild } from './contexts/is-my-guild';
