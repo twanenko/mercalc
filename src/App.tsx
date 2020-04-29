@@ -17,6 +17,7 @@ import { myGuildContext, useMyGuild } from './contexts/is-my-guild';
 import Guild from './components/guild';
 import MyGuild from './components/is-my-guild';
 import Timer from './components/timer';
+import SummeryText from './components/summery';
 
 export type Seed = {
   name: string;
@@ -152,15 +153,7 @@ const App = () => {
           <myGuildContext.Provider value={myGuildCtx}>
             <MyGuild />
           </myGuildContext.Provider>
-          <TextField
-            InputLabelProps={{ className: classes.text }}
-            label="コピペ用"
-            fullWidth={true}
-            variant="outlined"
-            margin="dense"
-            InputProps={{ className: classes.text }}
-            value={summery}
-          />
+          <SummeryText value={summery} />
           <Grid container spacing={3}>
             <Grid item xs>
               <guildContext.Provider value={guildYCtx}>
