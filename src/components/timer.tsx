@@ -46,9 +46,9 @@ const Timer = () => {
   }, [ctx, dateNow]);
 
   return (
-    <header className="App-header">
+    <div>
       <p>現在時刻: {dateNow}</p>
-    </header>
+    </div>
   );
 };
 

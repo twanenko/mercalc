@@ -17,7 +17,6 @@ import { myGuildContext, useMyGuild } from './contexts/is-my-guild';
 import Guild from './components/guild';
 import MyGuild from './components/is-my-guild';
 import Timer from './components/timer';
-import './App.css';
 
 export type Seed = {
   name: string;
@@ -34,7 +33,26 @@ export type Seed = {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: { flexGrow: 1, maxWidth: 'sm' },
+    app: {
+      backgroundColor: '#282c34',
+      color: 'white',
+    },
+    appHeader: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 'calc(10px + 2vmin)',
+    },
+    appMain: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      fontSize: 'calc(10px + 2vmin)',
+    },
+    container: { flexGrow: 1 },
     text: { color: 'white' },
   })
 );
@@ -105,7 +123,7 @@ const App = () => {
       myGuildCtx.myGuild !== 'yellow' ? `左上(黄):${guildYCtx.prayed} ` : '';
     const guildR =
       myGuildCtx.myGuild !== 'red' ? `右上(赤):${guildRCtx.prayed} ` : '';
-    const gate = `ゲート:${gateCtx.prayed} `;
+    const gate = `ゲート(門):${gateCtx.prayed} `;
     const guildB =
       myGuildCtx.myGuild !== 'blue' ? `左下(青):${guildBCtx.prayed} ` : '';
     const guildG =
@@ -122,12 +140,15 @@ const App = () => {
   ]);
 
   return (
-    <div className="App">
-      <div className="App-header">
+    <div className={classes.app}>
+      <div className={classes.appHeader}>
         <p>メルストお祈り計算機</p>
       </div>
-      <main className="App-main">
-        <Container className={classes.root}>
+      <main className={classes.appMain}>
+        <Container className={classes.container}>
+          <timerContext.Provider value={timeCtx}>
+            <Timer />
+          </timerContext.Provider>
           <myGuildContext.Provider value={myGuildCtx}>
             <MyGuild />
           </myGuildContext.Provider>
@@ -135,12 +156,11 @@ const App = () => {
             InputLabelProps={{ className: classes.text }}
             label="コピペ用"
             fullWidth={true}
+            variant="outlined"
+            margin="dense"
             InputProps={{ className: classes.text }}
             value={summery}
           />
-          <timerContext.Provider value={timeCtx}>
-            <Timer />
-          </timerContext.Provider>
           <Grid container spacing={3}>
             <Grid item xs>
               <guildContext.Provider value={guildYCtx}>
@@ -169,7 +189,7 @@ const App = () => {
             <Grid item xs>
               <guildContext.Provider value={gateCtx}>
                 <Guild
-                  name="ゲート"
+                  name="ゲート(門)"
                   cardStyle={guildStyles.gate}
                   minute={timeCtx.timer}
                   seedList={seed}

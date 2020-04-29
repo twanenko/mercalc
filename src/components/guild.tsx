@@ -93,7 +93,12 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
               autoSelect={true}
               onChange={handleSeedChange}
               renderInput={(params) => (
-                <TextField {...params} label="シード名" margin="normal" />
+                <TextField
+                  {...params}
+                  label="シード名"
+                  variant="outlined"
+                  margin="dense"
+                />
               )}
             />
           ) : (
@@ -103,8 +108,10 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
           )}
           <TextField
             label="モンスターの体力"
-            fullWidth={true}
             onChange={handleHpChange}
+            fullWidth={true}
+            variant="outlined"
+            margin="dense"
           />
         </CardContent>
       </Card>
