@@ -1,13 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete, {
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 import { Seed } from '../App';
 import { guildContext } from '../contexts/guild';
+
+const waves = [
+  { value: '1', label: '1体目' },
+  { value: '1.2', label: '2体目' },
+  { value: '1.4', label: '3体目' },
+  { value: '1.6', label: '4体目' },
+  { value: '1.8', label: '5体目' },
+];
 
 type GuildProps = {
   minute: string;
@@ -31,6 +41,9 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
   );
   const classes = useStyles();
 
+  /**
+   * autocompleteで、平仮名でも検索にかかるようにする
+   */
   const filterOptions = createFilterOptions({
     stringify: (option: Seed) => {
       const hiragana = option.name.replace(/[\u30a1-\u30f6]/g, (match) => {
@@ -41,7 +54,8 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
     },
   });
   /**
-   * 祈り値等を入れるcontext
+   * appに送るcontext
+   * 例:0,000%@00分
    */
   const ctx = useContext(guildContext);
   /**
@@ -68,54 +82,81 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
     setModified(minute);
   };
   /**
+   * 相手のwave数
+   */
+  const [wave, setWave] = useState('1');
+  const handleWaveChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWave(e.target.value);
+  };
+  /**
    * 祈りprayed
    */
   useEffect(() => {
     if (!seed) return;
     if (!hp) return;
+    const scaledHp = hp / +wave;
     const seedHp = seed.hp;
-    const prayed = Math.round((hp / seedHp - 1) * 100);
+    const prayed = Math.round((scaledHp / seedHp - 1) * 100);
     const validPrayed = prayed > 0 ? prayed : 0;
     ctx.updatePrayed(`${validPrayed.toLocaleString()}%@${modified}`);
-  }, [seed, hp, ctx, modified]);
+  }, [seed, hp, ctx, modified, wave]);
 
   return (
-    <div>
-      <Card className={classes.card}>
-        <CardContent>
-          {name}: {ctx.prayed}
-          {seedList ? (
-            <Autocomplete
-              options={seedList}
-              getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => option.name === value.name}
-              filterOptions={filterOptions}
-              autoSelect={true}
-              onChange={handleSeedChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="シード名"
-                  variant="outlined"
-                  margin="dense"
-                />
-              )}
-            />
-          ) : (
-            <div>
-              <p>シード情報を読み込み中</p>
-            </div>
-          )}
-          <TextField
-            label="モンスターの体力"
-            onChange={handleHpChange}
-            fullWidth={true}
-            variant="outlined"
-            margin="dense"
+    <Card className={classes.card}>
+      <CardContent>
+        {name}: {ctx.prayed}
+        {seedList ? (
+          <Autocomplete
+            options={seedList}
+            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option.name === value.name}
+            filterOptions={filterOptions}
+            autoSelect={true}
+            onChange={handleSeedChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="シード名"
+                variant="outlined"
+                margin="dense"
+              />
+            )}
           />
-        </CardContent>
-      </Card>
-    </div>
+        ) : (
+          <div>
+            <p>シード情報を読み込み中</p>
+          </div>
+        )}
+        <Grid container spacing={2}>
+          <Grid item xs>
+            <TextField
+              label="シード体力"
+              onChange={handleHpChange}
+              fullWidth={true}
+              variant="outlined"
+              margin="dense"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              select
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              label="Wave"
+              value={wave}
+              onChange={handleWaveChange}
+            >
+              {waves.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };
 
