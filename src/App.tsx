@@ -154,7 +154,7 @@ const App = () => {
           </myGuildContext.Provider>
           <SummeryText value={summery} />
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={5}>
               <guildContext.Provider value={guildYCtx}>
                 <Guild
                   name="左上(黄)"
@@ -164,8 +164,8 @@ const App = () => {
                 />
               </guildContext.Provider>
             </Grid>
-            <Grid item xs={false} sm={4}></Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={false} sm={2}></Grid>
+            <Grid item xs={12} sm={5}>
               <guildContext.Provider value={guildRCtx}>
                 <Guild
                   name="右上(赤)"
@@ -177,8 +177,8 @@ const App = () => {
             </Grid>
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={false} sm={4}></Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={false} sm={3}></Grid>
+            <Grid item xs={12} sm={6}>
               <guildContext.Provider value={gateCtx}>
                 <Guild
                   name="ゲート(門)"
@@ -188,10 +188,10 @@ const App = () => {
                 />
               </guildContext.Provider>
             </Grid>
-            <Grid item xs={false} sm={4}></Grid>
+            <Grid item xs={false} sm={3}></Grid>
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={5}>
               <guildContext.Provider value={guildBCtx}>
                 <Guild
                   name="左下(青)"
@@ -201,8 +201,8 @@ const App = () => {
                 />
               </guildContext.Provider>
             </Grid>
-            <Grid item xs={false} sm={4}></Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={false} sm={2}></Grid>
+            <Grid item xs={12} sm={5}>
               <guildContext.Provider value={guildGCtx}>
                 <Guild
                   name="右下(緑)"
