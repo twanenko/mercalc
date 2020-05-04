@@ -75,8 +75,8 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
     if (!hp) return;
     const seedHp = seed.hp;
     const prayed = Math.round((hp / seedHp - 1) * 100);
-    if (prayed < 0) ctx.updatePrayed(`0%(${modified})`);
-    else ctx.updatePrayed(`${prayed.toLocaleString()}%(${modified})`);
+    const validPrayed = prayed > 0 ? prayed : 0;
+    ctx.updatePrayed(`${validPrayed.toLocaleString()}%@${modified}`);
   }, [seed, hp, ctx, modified]);
 
   return (
