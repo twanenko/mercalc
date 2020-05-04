@@ -47,7 +47,7 @@ const Timer = () => {
 
   return (
     <div>
-      <p>現在時刻: {dateNow}</p>
+      <p>現在時刻(JST): {dateNow}</p>
     </div>
   );
 };
