@@ -34,17 +34,19 @@ const GuildInfo = () => {
 
   const [summery, setSummery] = useState('');
   useEffect(() => {
-    const findMyGuild = (name: string) => guild.find((g) => g.name === name);
-    const getText = (guildName: string) =>
-      myGuildName !== guildName
-        ? `${findMyGuild(guildName)?.title}:${findMyGuild(
-            guildName
-          )?.prayed.toLocaleString()}% `
-        : '';
+    const getGuildText = (guildName: string) => {
+      const myGuild = guild.find((g) => g.name === guildName);
+      if (!myGuild) return '';
+      if (myGuildName === guildName) return '';
+      const title = myGuild.title;
+      const prayed = myGuild.prayed.toLocaleString();
+      const modified = myGuild.modified;
+      return `${title}:${prayed}%${modified} `;
+    };
     setSummery(
-      `${getText('yellow')}${getText('red')}${getText(`gate`)}${getText(
-        'blue'
-      )}${getText('green')}`
+      `${getGuildText('yellow')}${getGuildText('red')}${getGuildText(
+        `gate`
+      )}${getGuildText('blue')}${getGuildText('green')}`
     );
   }, [guild, myGuildName]);
 
