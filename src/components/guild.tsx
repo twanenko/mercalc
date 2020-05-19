@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -8,9 +8,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete, {
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
-import { Seed } from '../App';
-import { guildContext } from '../contexts/guild';
+import { Seed, updatePrayed } from '../modules/prayerModule';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../rootReducer';
 
+/**
+ * waveの選択肢
+ * @param value 倍率
+ */
 const waves = [
   { value: '1', label: '1体目' },
   { value: '1.2', label: '2体目' },
@@ -19,27 +24,35 @@ const waves = [
   { value: '1.8', label: '5体目' },
 ];
 
-type GuildProps = {
-  minute: string;
-  name: string;
-  cardStyle: {
-    backgroundColor: string;
-    color: string;
-  };
-  seedList: Seed[] | null;
-};
+interface GuildStyle {
+  backgroundColor: string;
+  color: string;
+}
 
-const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
+export interface GuildProps {
+  name: string;
+  guildStyle: GuildStyle;
+}
+
+const Guild = ({ name, guildStyle }: GuildProps) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       card: {
-        backgroundColor: cardStyle.backgroundColor,
-        color: cardStyle.color,
+        backgroundColor: guildStyle.backgroundColor,
+        color: guildStyle.color,
         padding: theme.spacing(2),
       },
     })
   );
+  /** cssの設定 */
   const classes = useStyles();
+
+  /** state */
+  const seedList = useSelector((state: RootState) => state.prayer.seeds);
+  const myGuild = useSelector((state: RootState) =>
+    state.prayer.guild.find((g) => g.name === name)
+  );
+  const dispatch = useDispatch();
 
   /**
    * autocompleteで、平仮名でも検索にかかるようにする
@@ -53,58 +66,35 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
       return `${option.name}_${hiragana}`;
     },
   });
-  /**
-   * appに送るcontext
-   * 例:0,000%@00分
-   */
-  const ctx = useContext(guildContext);
-  /**
-   * 入力時の経過時間modified
-   * TODO setModifiedは祈り値が更新されたときのみ走らせる
-   */
-  const initialModified = minute;
-  const [modified, setModified] = useState(initialModified);
-  /**
-   * 選択されたseed
-   */
-  const [seed, setSeed] = useState<Seed | null>(null);
-  const handleSeedChange = (e: React.ChangeEvent<{}>, value: Seed | null) => {
-    setSeed(value);
-    setModified(minute);
-  };
-  /**
-   * 入力された体力hp
-   */
+
+  /** 選択されたシード */
+  const [selectedSeed, setSelectedSeed] = useState<Seed | null>(null);
+  /** 入力された体力 */
   const [hp, setHp] = useState(0);
+  /** シードのwave数 */
+  const [scale, setScale] = useState(1);
+
+  /** シード選択 */
+  const handleSeedChange = (e: React.ChangeEvent<{}>, value: Seed | null) => {
+    setSelectedSeed(value);
+  };
+  /** 体力入力 */
   const handleHpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 「+''」は0なのでnumberで返るぞ
     setHp(+e.target.value);
-    setModified(minute);
   };
-  /**
-   * 相手のwave数
-   */
-  const [wave, setWave] = useState('1');
+  /** wave選択 */
   const handleWaveChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWave(e.target.value);
+    setScale(+e.target.value);
   };
-  /**
-   * 祈りprayed
-   */
+
   useEffect(() => {
-    if (!seed) return;
-    if (!hp) return;
-    const scaledHp = hp / +wave;
-    const seedHp = seed.hp;
-    const prayed = Math.round((scaledHp / seedHp - 1) * 100);
-    const validPrayed = prayed > 0 ? prayed : 0;
-    ctx.updatePrayed(`${validPrayed.toLocaleString()}%@${modified}`);
-  }, [seed, hp, ctx, modified, wave]);
+    dispatch(updatePrayed({ name, seed: selectedSeed, hp, scale }));
+  }, [dispatch, hp, name, scale, selectedSeed]);
 
   return (
     <Card className={classes.card}>
       <CardContent>
-        {name}: {ctx.prayed}
+        {myGuild?.title}: {myGuild?.prayed.toLocaleString()}%{myGuild?.modified}
         {seedList ? (
           <Autocomplete
             options={seedList}
@@ -144,7 +134,7 @@ const Guild = ({ minute, name, cardStyle, seedList }: GuildProps) => {
               margin="dense"
               fullWidth
               label="Wave"
-              value={wave}
+              value={scale.toLocaleString()}
               onChange={handleWaveChange}
             >
               {waves.map((option) => (

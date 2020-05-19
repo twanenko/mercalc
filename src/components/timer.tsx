@@ -1,9 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
-import { timerContext } from '../contexts/timer';
+import { useDispatch } from 'react-redux';
+import { getTimer } from '../modules/prayerModule';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      fontSize: 'calc(20px + 2vmin)',
+      backgroundColor: '#717c91',
+      color: 'white',
+    },
+  })
+);
 
 const Timer = () => {
-  const ctx = useContext(timerContext);
+  const classes = useStyles();
+  const dispatch = useDispatch();
   /**
    * 端末とサーバーの時刻の差分dateDiff
    */
@@ -38,17 +52,18 @@ const Timer = () => {
   }, [dateDiff]);
 
   /**
-   * ctxに送る
+   * stateに送る
    */
   useEffect(() => {
-    const minute = dateNow.match(/\d{2}分/g);
-    ctx.updateTimer(minute ? minute[0] : '');
-  }, [ctx, dateNow]);
+    const matched = dateNow.match(/\d{2}分/g);
+    const minute = matched ? matched[0] : '';
+    dispatch(getTimer(minute));
+  }, [dateNow, dispatch]);
 
   return (
-    <div>
+    <Paper className={classes.root} elevation={5}>
       <p>現在時刻(JST): {dateNow}</p>
-    </div>
+    </Paper>
   );
 };
 

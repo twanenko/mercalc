@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,10 +8,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Tooltip from '@material-ui/core/Tooltip';
 import CopyToClipBoard from 'react-copy-to-clipboard';
-
-type Summery = {
-  value: string;
-};
+import { useSelector } from 'react-redux';
+import { RootState } from '../rootReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,9 +23,34 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SummeryText = ({ value }: Summery) => {
+const GuildInfo = () => {
   const classes = useStyles();
+  /** 自分のギルド */
+  const myGuildName = useSelector(
+    (state: RootState) => state.prayer.myGuildName
+  );
+  /** ギルド一覧 */
+  const guild = useSelector((state: RootState) => state.prayer.guild);
 
+  const [summery, setSummery] = useState('');
+  useEffect(() => {
+    const getGuildText = (guildName: string) => {
+      const myGuild = guild.find((g) => g.name === guildName);
+      if (!myGuild) return '';
+      if (myGuildName === guildName) return '';
+      const title = myGuild.title;
+      const prayed = myGuild.prayed.toLocaleString();
+      const modified = myGuild.modified;
+      return `${title}:${prayed}%${modified} `;
+    };
+    setSummery(
+      `${getGuildText('yellow')}${getGuildText('red')}${getGuildText(
+        `gate`
+      )}${getGuildText('blue')}${getGuildText('green')}`
+    );
+  }, [guild, myGuildName]);
+
+  /** コピペボタンのtooltip */
   const [openTip, setOpenTip] = useState(false);
   const handleCloseTip = () => {
     setOpenTip(false);
@@ -47,7 +70,7 @@ const SummeryText = ({ value }: Summery) => {
           id="summery"
           margin="dense"
           type="text"
-          value={value}
+          value={summery}
           startAdornment={
             <InputAdornment position="start">
               <Tooltip
@@ -58,9 +81,9 @@ const SummeryText = ({ value }: Summery) => {
                 placement="top"
                 title="copied"
               >
-                <CopyToClipBoard text={value}>
+                <CopyToClipBoard text={summery}>
                   <IconButton
-                    disabled={value === ''}
+                    disabled={summery === ''}
                     onClick={handleClickButton}
                   >
                     <AssignmentIcon className={classes.text} />
@@ -75,4 +98,4 @@ const SummeryText = ({ value }: Summery) => {
   );
 };
 
-export default SummeryText;
+export default GuildInfo;

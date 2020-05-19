@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
   yellow,
@@ -10,27 +10,14 @@ import {
 } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import { timerContext, useTimer } from './contexts/timer';
-import { guildContext, useGuild } from './contexts/guild';
-import { myGuildContext, useMyGuild } from './contexts/is-my-guild';
-import Guild from './components/guild';
-import MyGuild from './components/is-my-guild';
 import Timer from './components/timer';
-import SummeryText from './components/summery';
+import GuildPref from './components/guildpref';
+import GuildInfo from './components/guildinfo';
+import Guild, { GuildProps } from './components/guild';
+import { useAppDispatch } from './store';
+import { fetchSeedList } from './modules/prayerModule';
 
-export type Seed = {
-  name: string;
-  link: string;
-  img: string;
-  elem: string;
-  hp: number;
-  interval: number;
-  reach: number;
-  range: number;
-  targets: number;
-  times: number;
-};
-
+/** App大枠のcss */
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     app: {
@@ -53,91 +40,67 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 'calc(10px + 2vmin)',
     },
     container: { flexGrow: 1 },
-    text: { color: 'white' },
   })
 );
 
-const guildStyles = {
+/** 各ギルドの初期表示設定 */
+type GuildKeys = 'guildY' | 'guildR' | 'gate' | 'guildB' | 'guildG';
+type GuildPref = {
+  [K in GuildKeys]: GuildProps;
+};
+/** 各ギルドの初期設定 */
+const guildProps: GuildPref = {
   guildY: {
-    backgroundColor: yellow[100],
-    color: brown[600],
+    name: 'yellow',
+    guildStyle: {
+      backgroundColor: yellow[100],
+      color: brown[600],
+    },
   },
   guildR: {
-    backgroundColor: red[100],
-    color: red[900],
+    name: 'red',
+    guildStyle: {
+      backgroundColor: red[100],
+      color: red[900],
+    },
   },
   gate: {
-    backgroundColor: grey[200],
-    color: grey[900],
+    name: 'gate',
+    guildStyle: {
+      backgroundColor: grey[200],
+      color: grey[900],
+    },
   },
   guildB: {
-    backgroundColor: blue[100],
-    color: blue[900],
+    name: 'blue',
+    guildStyle: {
+      backgroundColor: blue[100],
+      color: blue[900],
+    },
   },
   guildG: {
-    backgroundColor: green[100],
-    color: green[900],
+    name: 'green',
+    guildStyle: {
+      backgroundColor: green[100],
+      color: green[900],
+    },
   },
 };
 
 const App = () => {
   const classes = useStyles();
   /**
-   * シード情報seed
+   * シード情報を取得、stateに反映させる
+   * とりあえずここでやっている
    */
-  const [seed, setSeed] = useState<Seed[] | null>(null);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    fetch(
-      'https://script.google.com/macros/s/AKfycbyt5WB_eEoamADwxePfKQxk3umq5khBbCeaIdRnLOTCeVHzkj0/exec'
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const seeds = data as Seed[];
-        setSeed(seeds);
-      });
-  }, []);
-  /**
-   * contextになっているtime
-   */
-  const timeCtx = useTimer();
-
-  /**
-   * contextになっているギルドの祈り値
-   */
-  const guildYCtx = useGuild();
-  const guildRCtx = useGuild();
-  const gateCtx = useGuild();
-  const guildBCtx = useGuild();
-  const guildGCtx = useGuild();
-  /**
-   * contextになっている自ギルト
-   */
-  const myGuildCtx = useMyGuild();
-
-  /**
-   * 祈り値まとめ
-   */
-  const [summery, setSummery] = useState('');
-  useEffect(() => {
-    const guildY =
-      myGuildCtx.myGuild !== 'yellow' ? `左上(黄):${guildYCtx.prayed} ` : '';
-    const guildR =
-      myGuildCtx.myGuild !== 'red' ? `右上(赤):${guildRCtx.prayed} ` : '';
-    const gate = `ゲート(門):${gateCtx.prayed} `;
-    const guildB =
-      myGuildCtx.myGuild !== 'blue' ? `左下(青):${guildBCtx.prayed} ` : '';
-    const guildG =
-      myGuildCtx.myGuild !== 'green' ? `右下(緑):${guildGCtx.prayed}` : '';
-    const sumText = `${guildY}${guildR}${gate}${guildB}${guildG}`;
-    setSummery(sumText);
-  }, [
-    gateCtx.prayed,
-    guildBCtx.prayed,
-    guildGCtx.prayed,
-    guildRCtx.prayed,
-    guildYCtx.prayed,
-    myGuildCtx.myGuild,
-  ]);
+    dispatch(
+      fetchSeedList(
+        'https://script.google.com/macros/s/AKfycbyt5WB_eEoamADwxePfKQxk3umq5khBbCeaIdRnLOTCeVHzkj0/exec'
+      )
+    );
+  }, [dispatch]);
 
   return (
     <div className={classes.app}>
@@ -146,71 +109,32 @@ const App = () => {
       </div>
       <main className={classes.appMain}>
         <Container className={classes.container}>
-          <timerContext.Provider value={timeCtx}>
-            <Timer />
-          </timerContext.Provider>
-          <myGuildContext.Provider value={myGuildCtx}>
-            <MyGuild />
-          </myGuildContext.Provider>
-          <SummeryText value={summery} />
+          <Timer />
+          <GuildPref />
+          <GuildInfo />
           <Grid container spacing={3}>
             <Grid item xs={12} sm={5}>
-              <guildContext.Provider value={guildYCtx}>
-                <Guild
-                  name="左上(黄)"
-                  cardStyle={guildStyles.guildY}
-                  minute={timeCtx.timer}
-                  seedList={seed}
-                />
-              </guildContext.Provider>
+              <Guild {...guildProps.guildY} />
             </Grid>
             <Grid item xs={false} sm={2}></Grid>
             <Grid item xs={12} sm={5}>
-              <guildContext.Provider value={guildRCtx}>
-                <Guild
-                  name="右上(赤)"
-                  cardStyle={guildStyles.guildR}
-                  minute={timeCtx.timer}
-                  seedList={seed}
-                />
-              </guildContext.Provider>
+              <Guild {...guildProps.guildR} />
             </Grid>
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={false} sm={3}></Grid>
             <Grid item xs={12} sm={6}>
-              <guildContext.Provider value={gateCtx}>
-                <Guild
-                  name="ゲート(門)"
-                  cardStyle={guildStyles.gate}
-                  minute={timeCtx.timer}
-                  seedList={seed}
-                />
-              </guildContext.Provider>
+              <Guild {...guildProps.gate} />
             </Grid>
             <Grid item xs={false} sm={3}></Grid>
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={5}>
-              <guildContext.Provider value={guildBCtx}>
-                <Guild
-                  name="左下(青)"
-                  cardStyle={guildStyles.guildB}
-                  minute={timeCtx.timer}
-                  seedList={seed}
-                />
-              </guildContext.Provider>
+              <Guild {...guildProps.guildB} />
             </Grid>
             <Grid item xs={false} sm={2}></Grid>
             <Grid item xs={12} sm={5}>
-              <guildContext.Provider value={guildGCtx}>
-                <Guild
-                  name="右下(緑)"
-                  cardStyle={guildStyles.guildG}
-                  minute={timeCtx.timer}
-                  seedList={seed}
-                />
-              </guildContext.Provider>
+              <Guild {...guildProps.guildG} />
             </Grid>
           </Grid>
         </Container>
