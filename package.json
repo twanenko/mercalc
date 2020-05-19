@@ -1,7 +1,8 @@
 {
-  "name": "mercalc-redux",
-  "version": "0.1.0",
+  "name": "mercalc",
+  "version": "0.2.0",
   "private": true,
+  "homepage": "https://twanenko.github.io/mercalc/",
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
