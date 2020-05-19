@@ -1,58 +1,147 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {
+  yellow,
+  brown,
+  red,
+  grey,
+  blue,
+  green,
+} from '@material-ui/core/colors';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import Timer from './components/timer';
+import GuildPref from './components/guildpref';
+import GuildInfo from './components/guildinfo';
+import Guild, { GuildProps } from './components/guild';
+import { useAppDispatch } from './store';
+import { fetchSeedList } from './modules/prayerModule';
 
-function App() {
+/** App大枠のcss */
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    app: {
+      backgroundColor: '#282c34',
+      color: 'white',
+    },
+    appHeader: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 'calc(10px + 2vmin)',
+    },
+    appMain: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      fontSize: 'calc(10px + 2vmin)',
+    },
+    container: { flexGrow: 1 },
+  })
+);
+
+/** 各ギルドの初期表示設定 */
+type GuildKeys = 'guildY' | 'guildR' | 'gate' | 'guildB' | 'guildG';
+type GuildPref = {
+  [K in GuildKeys]: GuildProps;
+};
+/** 各ギルドの初期設定 */
+const guildProps: GuildPref = {
+  guildY: {
+    name: 'yellow',
+    guildStyle: {
+      backgroundColor: yellow[100],
+      color: brown[600],
+    },
+  },
+  guildR: {
+    name: 'red',
+    guildStyle: {
+      backgroundColor: red[100],
+      color: red[900],
+    },
+  },
+  gate: {
+    name: 'gate',
+    guildStyle: {
+      backgroundColor: grey[200],
+      color: grey[900],
+    },
+  },
+  guildB: {
+    name: 'blue',
+    guildStyle: {
+      backgroundColor: blue[100],
+      color: blue[900],
+    },
+  },
+  guildG: {
+    name: 'green',
+    guildStyle: {
+      backgroundColor: green[100],
+      color: green[900],
+    },
+  },
+};
+
+const App = () => {
+  const classes = useStyles();
+  /**
+   * シード情報を取得、stateに反映させる
+   * とりあえずここでやっている
+   */
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchSeedList(
+        'https://script.google.com/macros/s/AKfycbyt5WB_eEoamADwxePfKQxk3umq5khBbCeaIdRnLOTCeVHzkj0/exec'
+      )
+    );
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className={classes.app}>
+      <div className={classes.appHeader}>
+        <p>メルストお祈り計算機</p>
+      </div>
+      <main className={classes.appMain}>
+        <Container className={classes.container}>
+          <Timer />
+          <GuildPref />
+          <GuildInfo />
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={5}>
+              <Guild {...guildProps.guildY} />
+            </Grid>
+            <Grid item xs={false} sm={2}></Grid>
+            <Grid item xs={12} sm={5}>
+              <Guild {...guildProps.guildR} />
+            </Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs={false} sm={3}></Grid>
+            <Grid item xs={12} sm={6}>
+              <Guild {...guildProps.gate} />
+            </Grid>
+            <Grid item xs={false} sm={3}></Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={5}>
+              <Guild {...guildProps.guildB} />
+            </Grid>
+            <Grid item xs={false} sm={2}></Grid>
+            <Grid item xs={12} sm={5}>
+              <Guild {...guildProps.guildG} />
+            </Grid>
+          </Grid>
+        </Container>
+        <span>tw: @twanenko</span>
+      </main>
     </div>
   );
-}
+};
 
 export default App;
