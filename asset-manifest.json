@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/mercalc/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/mercalc/static/js/main.db8199e7.chunk.js",
-    "main.js.map": "/mercalc/static/js/main.db8199e7.chunk.js.map",
+    "main.js": "/mercalc/static/js/main.a3591f3d.chunk.js",
+    "main.js.map": "/mercalc/static/js/main.a3591f3d.chunk.js.map",
     "runtime-main.js": "/mercalc/static/js/runtime-main.b2928fbd.js",
     "runtime-main.js.map": "/mercalc/static/js/runtime-main.b2928fbd.js.map",
     "static/js/2.230c82e0.chunk.js": "/mercalc/static/js/2.230c82e0.chunk.js",
     "static/js/2.230c82e0.chunk.js.map": "/mercalc/static/js/2.230c82e0.chunk.js.map",
     "index.html": "/mercalc/index.html",
-    "precache-manifest.d5b0eb371a71c3343b364254c7a8930c.js": "/mercalc/precache-manifest.d5b0eb371a71c3343b364254c7a8930c.js",
+    "precache-manifest.623998e61a2b2e98ec63cdf0387718a2.js": "/mercalc/precache-manifest.623998e61a2b2e98ec63cdf0387718a2.js",
     "service-worker.js": "/mercalc/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/mercalc/static/css/main.5ecd60fb.chunk.css.map",
     "static/js/2.230c82e0.chunk.js.LICENSE.txt": "/mercalc/static/js/2.230c82e0.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.b2928fbd.js",
     "static/js/2.230c82e0.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.db8199e7.chunk.js"
+    "static/js/main.a3591f3d.chunk.js"
   ]
 }

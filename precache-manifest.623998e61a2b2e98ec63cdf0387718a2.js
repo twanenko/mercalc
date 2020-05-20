@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e4156a55f32fd9c69ee5f579980d6381",
+    "revision": "c3e20ef9dbc1239b442c391de401601a",
     "url": "/mercalc/index.html"
   },
   {
-    "revision": "99ac31968b34ba13b119",
+    "revision": "136240f1c696fa075456",
     "url": "/mercalc/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mercalc/static/js/2.230c82e0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "99ac31968b34ba13b119",
-    "url": "/mercalc/static/js/main.db8199e7.chunk.js"
+    "revision": "136240f1c696fa075456",
+    "url": "/mercalc/static/js/main.a3591f3d.chunk.js"
   },
   {
     "revision": "b22f05060baff1565c82",
