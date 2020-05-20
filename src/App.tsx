@@ -24,20 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#282c34',
       color: 'white',
     },
-    appHeader: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 'calc(10px + 2vmin)',
-    },
     appMain: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
       minHeight: '100vh',
       fontSize: 'calc(10px + 2vmin)',
+    },
+    header: {
+      display: 'block',
+      marginBlockStart: '1em',
     },
     container: { flexGrow: 1 },
   })
@@ -104,11 +100,9 @@ const App = () => {
 
   return (
     <div className={classes.app}>
-      <div className={classes.appHeader}>
-        <p>メルストお祈り計算機</p>
-      </div>
       <main className={classes.appMain}>
         <Container className={classes.container}>
+          <div className={classes.header}>メルストお祈り計算機</div>
           <Timer />
           <GuildPref />
           <GuildInfo />

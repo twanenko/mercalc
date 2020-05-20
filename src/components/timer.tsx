@@ -9,6 +9,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       fontSize: 'calc(20px + 2vmin)',
+      paddingInlineStart: '1vmin',
+      marginBlockEnd: '1em',
       backgroundColor: '#717c91',
       color: 'white',
     },
@@ -62,7 +64,7 @@ const Timer = () => {
 
   return (
     <Paper className={classes.root} elevation={5}>
-      <p>現在時刻(JST): {dateNow}</p>
+      <div>現在時刻(JST): {dateNow}</div>
     </Paper>
   );
 };
