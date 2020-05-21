@@ -52,6 +52,7 @@ const Guild = ({ name, guildStyle }: GuildProps) => {
   const myGuild = useSelector((state: RootState) =>
     state.prayer.guild.find((g) => g.name === name)
   );
+  const seedStatus = useSelector((state: RootState) => state.prayer.seedStatus);
   const dispatch = useDispatch();
 
   /**
@@ -113,9 +114,7 @@ const Guild = ({ name, guildStyle }: GuildProps) => {
             )}
           />
         ) : (
-          <div>
-            <p>シード情報を読み込み中</p>
-          </div>
+          <div>{seedStatus}</div>
         )}
         <Grid container spacing={2}>
           <Grid item xs>
