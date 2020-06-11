@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/mercalc/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/mercalc/static/js/main.a3591f3d.chunk.js",
-    "main.js.map": "/mercalc/static/js/main.a3591f3d.chunk.js.map",
+    "main.js": "/mercalc/static/js/main.aa2fb290.chunk.js",
+    "main.js.map": "/mercalc/static/js/main.aa2fb290.chunk.js.map",
     "runtime-main.js": "/mercalc/static/js/runtime-main.b2928fbd.js",
     "runtime-main.js.map": "/mercalc/static/js/runtime-main.b2928fbd.js.map",
-    "static/js/2.230c82e0.chunk.js": "/mercalc/static/js/2.230c82e0.chunk.js",
-    "static/js/2.230c82e0.chunk.js.map": "/mercalc/static/js/2.230c82e0.chunk.js.map",
+    "static/js/2.a1788a69.chunk.js": "/mercalc/static/js/2.a1788a69.chunk.js",
+    "static/js/2.a1788a69.chunk.js.map": "/mercalc/static/js/2.a1788a69.chunk.js.map",
     "index.html": "/mercalc/index.html",
-    "precache-manifest.623998e61a2b2e98ec63cdf0387718a2.js": "/mercalc/precache-manifest.623998e61a2b2e98ec63cdf0387718a2.js",
+    "precache-manifest.f1e5f70f9338ff1e024027a26cdc5ee3.js": "/mercalc/precache-manifest.f1e5f70f9338ff1e024027a26cdc5ee3.js",
     "service-worker.js": "/mercalc/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/mercalc/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.230c82e0.chunk.js.LICENSE.txt": "/mercalc/static/js/2.230c82e0.chunk.js.LICENSE.txt"
+    "static/js/2.a1788a69.chunk.js.LICENSE.txt": "/mercalc/static/js/2.a1788a69.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.b2928fbd.js",
-    "static/js/2.230c82e0.chunk.js",
+    "static/js/2.a1788a69.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.a3591f3d.chunk.js"
+    "static/js/main.aa2fb290.chunk.js"
   ]
 }
