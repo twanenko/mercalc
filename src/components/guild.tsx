@@ -72,6 +72,8 @@ const Guild = ({ name, guildStyle }: GuildProps) => {
   const [selectedSeed, setSelectedSeed] = useState<Seed | null>(null);
   /** 入力された体力 */
   const [hp, setHp] = useState(0);
+  /** 体力欄に正しく入っているか */
+  const [hpError, setHpError] = useState(false);
   /** シードのwave数 */
   const [scale, setScale] = useState(1);
 
@@ -81,6 +83,14 @@ const Guild = ({ name, guildStyle }: GuildProps) => {
   };
   /** 体力入力 */
   const handleHpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = RegExp(/^([1-9]\d*|0)$/);
+    const isNumber = regex.test(e.target.value);
+    if (!isNumber) {
+      setHpError(true);
+      setHp(0);
+      return;
+    }
+    setHpError(false);
     setHp(+e.target.value);
   };
   /** wave選択 */
@@ -119,7 +129,8 @@ const Guild = ({ name, guildStyle }: GuildProps) => {
         <Grid container spacing={2}>
           <Grid item xs>
             <TextField
-              label="シード体力"
+              label="シード体力(数字)"
+              error={hpError}
               onChange={handleHpChange}
               fullWidth={true}
               variant="outlined"
